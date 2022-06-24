@@ -68,6 +68,8 @@ static void onBtnPress(char key, uint8_t ledNumber)
         animationStart();
         isInStandBy = false;
         setAllLeds(HIGH);
+        Keyboard.press(key);
+        Keyboard.releaseAll();
         return;
     }
     setAllLeds(HIGH);
@@ -117,6 +119,7 @@ void loop(void)
     {
         previousMillis += standByTime;
         setAllLeds(LOW);
+        isInStandBy = true;
     }
 
     if (isInit && currentMillis - previousMillis >= initTimeOFF)
