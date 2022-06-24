@@ -28,7 +28,6 @@ static void animationStart()
 {
 
     setAllLeds(LOW);
-    delay(200);
 
     digitalWrite(LED_1_PIN, HIGH);
     delay(100);
@@ -55,6 +54,9 @@ static void animationStart()
     setAllLeds(HIGH);
     delay(100);
     setAllLeds(LOW);
+
+    delay(300);
+    setAllLeds(HIGH);
 }
 
 static void onBtnPress(char key, uint8_t ledNumber)
@@ -94,7 +96,6 @@ void setup(void)
     pinMode(LED_2_PIN, OUTPUT);
     pinMode(LED_3_PIN, OUTPUT);
     pinMode(LED_4_PIN, OUTPUT);
-    setAllLeds(HIGH);
 }
 
 void loop(void)
@@ -126,7 +127,6 @@ void loop(void)
     {
         previousMillis += initTimeOFF;
         animationStart();
-        setAllLeds(LOW);
         isInit = false;
     }
 
