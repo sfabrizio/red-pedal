@@ -13,6 +13,7 @@
 const unsigned long standByTime = 5 * 60000; // in mins
 const unsigned long initTimeOFF = 2000;      // secs
 boolean isInit = true;
+boolean isInStandBy = false;
 unsigned long previousMillis = 0;
 
 static void setAllLeds(uint8_t state)
@@ -62,7 +63,15 @@ static void onBtnPress(char key, uint8_t ledNumber)
     {
         return;
     }
+    if (isInStandBy)
+    {
+        animationStart();
+        isInStandBy = false;
+        setAllLeds(HIGH);
+        return;
+    }
     setAllLeds(HIGH);
+    delay(200);
     digitalWrite(ledNumber, LOW);
     Keyboard.press(key);
     Keyboard.releaseAll(); // for just send once press
