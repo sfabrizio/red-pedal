@@ -25,7 +25,11 @@ static void setAllLeds(uint8_t state)
 }
 
 static void onBtnPress(char key, uint8_t ledNumber)
-{   
+{
+    if (isInit)
+    {
+        return;
+    }
     setAllLeds(HIGH);
     digitalWrite(ledNumber, LOW);
     Keyboard.press(key);
@@ -48,17 +52,16 @@ void setup(void)
     pinMode(LED_3_PIN, OUTPUT);
     pinMode(LED_4_PIN, OUTPUT);
     setAllLeds(HIGH);
-    
 }
 
 void loop(void)
-{   
+{
     static uint8_t btn1StateLast = 0;
     static uint8_t btn2StateLast = 0;
     static uint8_t btn3StateLast = 0;
     static uint8_t btn4StateLast = 0;
     unsigned long currentMillis = millis();
-    
+
     uint8_t btn1State;
     uint8_t btn2State;
     uint8_t btn3State;
@@ -69,16 +72,19 @@ void loop(void)
     btn3State = digitalRead(BTN_3_PIN);
     btn4State = digitalRead(BTN_4_PIN);
 
-     if (currentMillis - previousMillis >= standByTime) {
+    if (currentMillis - previousMillis >= standByTime)
+    {
         previousMillis += standByTime;
         setAllLeds(LOW);
-     }
-     
-     if (isInit && currentMillis - previousMillis >= initTimeOFF) {
-         previousMillis += initTimeOFF;
-         setAllLeds(LOW);
-         isInit = false;
-     }
+    }
+
+    if (isInit && currentMillis - previousMillis >= initTimeOFF)
+    {
+        previousMillis += initTimeOFF;
+        animationStart();
+        setAllLeds(LOW);
+        isInit = false;
+    }
 
     if (btn1State != btn1StateLast)
     {
