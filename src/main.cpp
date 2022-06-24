@@ -11,17 +11,49 @@
 #define LED_4_PIN 18
 
 const unsigned long standByTime = 5 * 60000; // in mins
-const unsigned long initTimeOFF = 2000; // secs
+const unsigned long initTimeOFF = 2000;      // secs
 boolean isInit = true;
-unsigned long previousMillis = 0; 
-
+unsigned long previousMillis = 0;
 
 static void setAllLeds(uint8_t state)
-{   
+{
     digitalWrite(LED_1_PIN, state);
     digitalWrite(LED_2_PIN, state);
     digitalWrite(LED_3_PIN, state);
     digitalWrite(LED_4_PIN, state);
+}
+
+static void animationStart()
+{
+
+    setAllLeds(LOW);
+    delay(200);
+
+    digitalWrite(LED_1_PIN, HIGH);
+    delay(100);
+    digitalWrite(LED_2_PIN, HIGH);
+    delay(100);
+    digitalWrite(LED_3_PIN, HIGH);
+    delay(100);
+    digitalWrite(LED_4_PIN, HIGH);
+    delay(100);
+    digitalWrite(LED_4_PIN, LOW);
+    delay(100);
+    digitalWrite(LED_3_PIN, LOW);
+    delay(100);
+    digitalWrite(LED_2_PIN, LOW);
+    delay(100);
+    digitalWrite(LED_1_PIN, LOW);
+    delay(100);
+
+    delay(100);
+    setAllLeds(HIGH);
+    delay(100);
+    setAllLeds(LOW);
+    delay(100);
+    setAllLeds(HIGH);
+    delay(100);
+    setAllLeds(LOW);
 }
 
 static void onBtnPress(char key, uint8_t ledNumber)
@@ -34,7 +66,7 @@ static void onBtnPress(char key, uint8_t ledNumber)
     digitalWrite(ledNumber, LOW);
     Keyboard.press(key);
     Keyboard.releaseAll(); // for just send once press
-    delay(500); // led turn off & on time
+    delay(500);            // led turn off & on time
     digitalWrite(ledNumber, HIGH);
     previousMillis = millis(); // reset standBy time
 }
