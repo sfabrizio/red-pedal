@@ -10,14 +10,10 @@
 #define LED_3_PIN 19
 #define LED_4_PIN 18
 
-static void onBtnPress(char key, uint8_t ledNumber)
-{   
-    digitalWrite(ledNumber, LOW);
-    Keyboard.press(key);
-    Keyboard.releaseAll(); // for just send once press
-    delay(500); // led turn off & on time
-    digitalWrite(ledNumber, HIGH);
-}
+const unsigned long standByTime = 5 * 60000; // in mins
+const unsigned long initTimeOFF = 2000; // secs
+boolean isInit = true;
+unsigned long previousMillis = 0; 
 
 
 static void setAllLeds(uint8_t state)
@@ -26,6 +22,17 @@ static void setAllLeds(uint8_t state)
     digitalWrite(LED_2_PIN, state);
     digitalWrite(LED_3_PIN, state);
     digitalWrite(LED_4_PIN, state);
+}
+
+static void onBtnPress(char key, uint8_t ledNumber)
+{   
+    setAllLeds(HIGH);
+    digitalWrite(ledNumber, LOW);
+    Keyboard.press(key);
+    Keyboard.releaseAll(); // for just send once press
+    delay(500); // led turn off & on time
+    digitalWrite(ledNumber, HIGH);
+    previousMillis = millis(); // reset standBy time
 }
 
 void setup(void)
@@ -41,6 +48,7 @@ void setup(void)
     pinMode(LED_3_PIN, OUTPUT);
     pinMode(LED_4_PIN, OUTPUT);
     setAllLeds(HIGH);
+    
 }
 
 void loop(void)
@@ -49,6 +57,8 @@ void loop(void)
     static uint8_t btn2StateLast = 0;
     static uint8_t btn3StateLast = 0;
     static uint8_t btn4StateLast = 0;
+    unsigned long currentMillis = millis();
+    
     uint8_t btn1State;
     uint8_t btn2State;
     uint8_t btn3State;
@@ -58,6 +68,17 @@ void loop(void)
     btn2State = digitalRead(BTN_2_PIN);
     btn3State = digitalRead(BTN_3_PIN);
     btn4State = digitalRead(BTN_4_PIN);
+
+     if (currentMillis - previousMillis >= standByTime) {
+        previousMillis += standByTime;
+        setAllLeds(LOW);
+     }
+     
+     if (isInit && currentMillis - previousMillis >= initTimeOFF) {
+         previousMillis += initTimeOFF;
+         setAllLeds(LOW);
+         isInit = false;
+     }
 
     if (btn1State != btn1StateLast)
     {
