@@ -10,8 +10,8 @@
 #define LED_3_PIN 19
 #define LED_4_PIN 18
 
-const unsigned long standByTime = 5 * 60000; // in mins
-const unsigned long initTimeOFF = 2000;      // secs
+const unsigned long standByTime = 5 * 60000; // 5 mins
+const unsigned long initTimeOFF = 2000;      // 2 secs
 boolean isInit = true;
 boolean isInStandBy = false;
 unsigned long previousMillis = 0;
@@ -148,7 +148,7 @@ void loop(void)
     if (btn4State != btn4StateLast)
     {
         btn4StateLast = btn4State;
-        onBtnPress('4', LED_4_PIN);
+        onBtnPress(' ', LED_4_PIN);
     }
     delay(50);
 }
